@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 from app.database import create_tables
 from app.routes.product import router as ProductRouter
 from app.routes.order import router as OrderRouter

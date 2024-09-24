@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 
-from app.models.products import ProductOut, Product, ProductIn, ProductUpdate
+from app.models.products import ProductOut, ProductIn, ProductUpdate
 from app.services.products import product_service
 from app.database import get_db
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -26,6 +26,7 @@ async def create_product(product: ProductIn, db: AsyncSession = Depends(get_db))
 @router.put("/products/{id}")
 async def update_product(product_id: int, product_update: ProductUpdate, db: AsyncSession = Depends(get_db)):
     return await product_service.update_product(product_id=product_id, product_update=product_update, db=db)
+
 
 @router.delete("/products/{id}")
 async def delete_product(product_id: int, db: AsyncSession = Depends(get_db)):

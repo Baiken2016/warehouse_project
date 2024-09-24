@@ -21,7 +21,6 @@ class OrderService:
             if not product or product.quantity < item.quantity:
                 raise HTTPException(status_code=404, detail=f"The product with id: {item.product_id} not enough")
             product.quantity -= item.quantity
-            
             order_item = OrderItem(
                 order_id=new_order.id,
                 product_id=item.product_id,
@@ -30,19 +29,19 @@ class OrderService:
             db.add(order_item)
         await db.commit()
         return order_out
-    
+
     async def order_list(self, db: AsyncSession = Depends(get_db)) -> list[OrderOut]:
         orders_out = [OrderOut.from_orm(order) for order in (await db.execute(select(Order))).scalars().all()]
         return orders_out
-    
-    
+
     async def get_order(self, order_id: int, db: AsyncSession = Depends(get_db)) -> OrderOut:
         order = await db.get(Order, order_id)
         if not order:
             raise HTTPException(status_code=404, detail="Order not found")
         return OrderOut.from_orm(order)
-    
-    async def update_order_status(self, order_id: int, order_update: OrderStatusUpdate, db: AsyncSession = Depends(get_db)) -> OrderOut:
+
+    async def update_order_status(self, order_id: int, order_update: OrderStatusUpdate,
+                                  db: AsyncSession = Depends(get_db)) -> OrderOut:
         order = await db.get(Order, order_id)
         if not order:
             raise HTTPException(status_code=404, detail="Order not found")
@@ -51,6 +50,6 @@ class OrderService:
         await db.commit()
         await db.refresh(order)
         return OrderOut.from_orm(order)
-    
-    
+
+
 order_service = OrderService()

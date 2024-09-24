@@ -6,6 +6,7 @@ from app.services.order import order_service
 
 router = APIRouter()
 
+
 @router.post("/orders", response_model=OrderOut)
 async def create_order(order_create: OrderCreate, db: AsyncSession = Depends(get_db)):
     return await order_service.create_order(order_create=order_create, db=db)
